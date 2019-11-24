@@ -6,8 +6,6 @@ import okio.BufferedSource
 import okio.Okio
 import org.junit.After
 import org.junit.Before
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,7 +13,6 @@ import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-@RunWith(JUnit4::class)
 open class MockGithubApi<T> {
 
     private var mockWebServer: MockWebServer? = null
