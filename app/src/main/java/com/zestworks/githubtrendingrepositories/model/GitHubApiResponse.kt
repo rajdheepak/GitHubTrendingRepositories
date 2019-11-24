@@ -1,39 +1,38 @@
 package com.zestworks.githubtrendingrepositories.model
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "githubapi", primaryKeys = ["url"])
 data class GitHubApiResponse(
 
 	@field:SerializedName("forks")
-	val forks: Int? = null,
-
-	@field:SerializedName("builtBy")
-	val builtBy: List<BuiltByItem?>? = null,
+	val forks: Int = 0,
 
 	@field:SerializedName("author")
-	val author: String? = null,
+	val author: String = "",
 
 	@field:SerializedName("name")
-	val name: String? = null,
+	val name: String = "",
 
 	@field:SerializedName("description")
-	val description: String? = null,
+	val description: String = "",
 
 	@field:SerializedName("language")
-	val language: String? = null,
+	val language: String = "",
 
 	@field:SerializedName("avatar")
-	val avatar: String? = null,
+	val avatar: String = "",
 
 	@field:SerializedName("languageColor")
-	val languageColor: String? = null,
+	val languageColor: String = "",
 
 	@field:SerializedName("stars")
-	val stars: Int? = null,
+	val stars: Int = 0,
 
 	@field:SerializedName("url")
-	val url: String? = null,
+	val url: String = "",
 
 	@field:SerializedName("currentPeriodStars")
-	val currentPeriodStars: Int? = null
+	val currentPeriodStars: Int = 0
 )

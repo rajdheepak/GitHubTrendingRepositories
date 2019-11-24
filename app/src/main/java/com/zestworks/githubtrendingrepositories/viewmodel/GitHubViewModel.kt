@@ -1,11 +1,9 @@
 package com.zestworks.githubtrendingrepositories.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.zestworks.githubtrendingrepositories.model.GithubState
-import com.zestworks.githubtrendingrepositories.model.RequestFailed
-import com.zestworks.githubtrendingrepositories.model.RequestOnGoing
-import com.zestworks.githubtrendingrepositories.model.Success
+import com.zestworks.githubtrendingrepositories.model.*
 import com.zestworks.githubtrendingrepositories.repository.GitHubRepository
 import com.zestworks.githubtrendingrepositories.repository.ResponseListener
 
@@ -31,6 +29,10 @@ class GitHubViewModel(val gitHubRepository: GitHubRepository): ViewModel() {
 
             })
         }
+    }
+
+    fun getGitHubs(): LiveData<List<GitHubApiResponse>> {
+        return gitHubRepository.getGitHubs()
     }
 
 }

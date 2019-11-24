@@ -1,6 +1,8 @@
 package com.zestworks.githubtrendingrepositories.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import com.zestworks.githubtrendingrepositories.database.GithubDb
 import com.zestworks.githubtrendingrepositories.model.GitHubApiResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -12,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class GitHubRepositoryImpl: GitHubRepository {
+class GitHubRepositoryImpl(val githubDb: GithubDb): GitHubRepository {
 
     private var gitHubRequestMaker: GitHubRequestMaker
 
@@ -32,12 +34,23 @@ class GitHubRepositoryImpl: GitHubRepository {
             val blockingFirst = gitHubRequestMaker.fetchWeatherForecast().blockingFirst()
             if(blockingFirst.isSuccessful) {
                 //update network state as success
-                responseListener.onSuccess()
+                val body = blockingFirst.body()
+                if(body != null && body.isNotEmpty()) {
+                    githubDb.clearAllTables()
+                    githubDb.githubDao.addGithub(body)
+                    responseListener.onSuccess()
+                } else {
+                    responseListener.onFailure()
+                }
             } else {
                 //update network state as error
                 responseListener.onFailure()
             }
         }
+    }
+
+    override fun getGitHubs(): LiveData<List<GitHubApiResponse>> {
+        return githubDb.githubDao.getGitHubApis()
     }
 }
 

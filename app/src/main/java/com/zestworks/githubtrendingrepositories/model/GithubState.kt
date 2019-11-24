@@ -1,8 +1,7 @@
 package com.zestworks.githubtrendingrepositories.model
 
 data class GithubState (
-    val gitHubApiResponseState: GitHubApiResponseState = YetToStart,
-    val gitHubApiResponse: List<GitHubApiResponse> = mutableListOf()
+    val gitHubApiResponseState: GitHubApiResponseState = YetToStart
 )
 
 sealed class GitHubApiResponseState
