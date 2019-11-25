@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.zestworks.githubtrendingrepositories.R
 import com.zestworks.githubtrendingrepositories.model.*
@@ -55,7 +56,7 @@ class GithubListFragment: Fragment() {
         super.onStart()
         gitHubViewModel = ViewModelFactory.getGithubViewModel(activity!! as AppCompatActivity)
         compositeDisposable = CompositeDisposable()
-        gitHubViewModel.githubState.observeOn(AndroidSchedulers.mainThread()).subscribe {
+        compositeDisposable.add(gitHubViewModel.githubState.observeOn(AndroidSchedulers.mainThread()).subscribe {
             when(it.gitHubApiResponseState) {
                 YetToStart -> {
                     if(shimmer_layout.visibility != View.VISIBLE && gitHubApiResponse.isEmpty()) {
@@ -87,10 +88,10 @@ class GithubListFragment: Fragment() {
                     }
                 }
             }
-        }
+        })
         gitHubViewModel.getGitHubs().observe(this, Observer {
             gitHubApiResponse = it
-            swipe_refresh.isRefreshing = false
+            view?.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)?.isRefreshing = false
             if(it.isNotEmpty()) {
                 if(shimmer_layout.visibility == View.VISIBLE) {
                     shimmer_layout.visibility = View.GONE
