@@ -21,8 +21,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class GithubUiAutomationTests {
-    //to give location permission in run time while running the test
-
 
     @get:Rule
     val activityRule = ActivityTestRule(MainActivity::class.java)
