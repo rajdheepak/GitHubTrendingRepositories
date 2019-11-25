@@ -35,4 +35,12 @@ class GitHubViewModel(val gitHubRepository: GitHubRepository): ViewModel() {
         return gitHubRepository.getGitHubs()
     }
 
+    fun onTouchingViewHolder(position: Int) {
+        if(githubState.value.touchedItem == position) {
+            githubState.accept(githubState.value.copy(touchedItem = -1))
+        } else {
+            githubState.accept(githubState.value.copy(touchedItem = position))
+        }
+    }
+
 }

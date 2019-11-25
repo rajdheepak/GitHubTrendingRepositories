@@ -11,7 +11,7 @@ import com.zestworks.githubtrendingrepositories.R
 import com.zestworks.githubtrendingrepositories.model.GitHubApiResponse
 import de.hdodenhof.circleimageview.CircleImageView
 
-class GithubListAdapter(var githubItems: List<GitHubApiResponse>): RecyclerView.Adapter<GithubListAdapter.GithubListholder>() {
+class GithubListAdapter(var githubItems: List<GitHubApiResponse>, val listener: Listener, var touchedPosition: Int = -1): RecyclerView.Adapter<GithubListAdapter.GithubListholder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GithubListholder {
         val view =
@@ -29,6 +29,11 @@ class GithubListAdapter(var githubItems: List<GitHubApiResponse>): RecyclerView.
         notifyDataSetChanged()
     }
 
+    fun updatePosition(position: Int) {
+        this.touchedPosition = position
+        notifyDataSetChanged()
+    }
+
     override fun onBindViewHolder(holder: GithubListholder, position: Int) {
         val gitHubApiResponse = githubItems[position]
         holder.text.text = gitHubApiResponse.name
@@ -40,12 +45,17 @@ class GithubListAdapter(var githubItems: List<GitHubApiResponse>): RecyclerView.
         Picasso.get().load(gitHubApiResponse.avatar)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(holder.imageView)
-        holder.holder.setOnClickListener {
-            if(holder.bottom.visibility == View.VISIBLE){
-                holder.bottom.visibility = View.GONE
-            } else {
+        if(position == touchedPosition) {
+            if(holder.bottom.visibility != View.VISIBLE){
                 holder.bottom.visibility = View.VISIBLE
             }
+        } else {
+            if(holder.bottom.visibility != View.GONE){
+                holder.bottom.visibility = View.GONE
+            }
+        }
+        holder.holder.setOnClickListener {
+            listener.onTouch(position)
         }
     }
 
@@ -60,4 +70,8 @@ class GithubListAdapter(var githubItems: List<GitHubApiResponse>): RecyclerView.
         val fork = itemView.findViewById<TextView>(R.id.fork_text)
         val url = itemView.findViewById<TextView>(R.id.url)
     }
+}
+
+interface Listener {
+    fun onTouch(position: Int)
 }

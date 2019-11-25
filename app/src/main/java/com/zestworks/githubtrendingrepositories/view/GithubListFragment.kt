@@ -42,7 +42,12 @@ class GithubListFragment: Fragment() {
         error_page_layout.visibility = View.GONE
         github_list_view.layoutManager = LinearLayoutManager(context)
         github_list_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        github_list_view.adapter = GithubListAdapter(arrayListOf())
+        github_list_view.adapter = GithubListAdapter(arrayListOf(), object: Listener {
+            override fun onTouch(position: Int) {
+                gitHubViewModel.onTouchingViewHolder(position)
+            }
+
+        })
         swipe_refresh.setOnRefreshListener {
             gitHubViewModel.fetchGithubRepositories()
         }
@@ -57,6 +62,7 @@ class GithubListFragment: Fragment() {
         gitHubViewModel = ViewModelFactory.getGithubViewModel(activity!! as AppCompatActivity)
         compositeDisposable = CompositeDisposable()
         compositeDisposable.add(gitHubViewModel.githubState.observeOn(AndroidSchedulers.mainThread()).subscribe {
+            (github_list_view.adapter as GithubListAdapter)?.updatePosition(it.touchedItem)
             when(it.gitHubApiResponseState) {
                 YetToStart -> {
                     if(shimmer_layout.visibility != View.VISIBLE && gitHubApiResponse.isEmpty()) {

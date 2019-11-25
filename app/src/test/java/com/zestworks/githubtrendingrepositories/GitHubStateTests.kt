@@ -61,7 +61,24 @@ class GitHubStateTests {
         gitHubApiResponseListener.value.onFailure()
         val stateAfterNetworkSuccess = gitHubStateTestObserver.values().last()
         (stateAfterNetworkSuccess.gitHubApiResponseState is RequestFailed) shouldBe true
+    }
 
+    @Test
+    fun `touching view holder should maintain selected position in state`() {
+        val initialState = gitHubStateTestObserver.values().last()
+        initialState.touchedItem shouldBe -1
+        weatherViewModel.onTouchingViewHolder(0)
+        gitHubStateTestObserver.values().last().touchedItem shouldBe 0
+    }
+
+    @Test
+    fun `touching on a selected item should unselect the item`() {
+        val initialState = gitHubStateTestObserver.values().last()
+        initialState.touchedItem shouldBe -1
+        weatherViewModel.onTouchingViewHolder(0)
+        gitHubStateTestObserver.values().last().touchedItem shouldBe 0
+        weatherViewModel.onTouchingViewHolder(0)
+        gitHubStateTestObserver.values().last().touchedItem shouldBe -1
     }
 }
 
