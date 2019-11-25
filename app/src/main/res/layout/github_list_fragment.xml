@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@+id/swipe_refresh"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:shimmer_duration="700"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+                <include layout="@layout/default_placeholder"/>
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/github_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/error_page_layout"
+            tools:visibility="visible"
+            android:visibility="gone"
+            layout="@layout/error_page_layout">
+        </include>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

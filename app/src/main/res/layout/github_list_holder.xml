@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/holder"
+        android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/title"
+            app:layout_constraintBottom_toBottomOf="@id/description"
+            android:id="@+id/author_image"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/title"
+            app:layout_constraintStart_toEndOf="@id/author_image"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            tools:text="Github"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="#52575C"
+            android:textSize="12sp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="15sp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="#52575C"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintStart_toStartOf="@id/title"
+            app:layout_constraintBottom_toTopOf="@id/bottom_expand"
+            tools:text="Github repository"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintStart_toStartOf="@id/title"
+            android:animateLayoutChanges="true"
+            android:id="@+id/bottom_expand"
+            app:layout_constraintTop_toBottomOf="@id/description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/url"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="12sp"
+                android:textColor="#52575c"
+                android:layout_marginEnd="16dp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:text="•"
+                app:layout_constraintTop_toBottomOf="@id/url"
+                android:textAlignment="textStart"
+                android:textSize="25sp"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/lang_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                app:layout_constraintStart_toEndOf="@id/lang_image"
+                tools:text="c++"
+                android:layout_marginStart="4dp"
+                android:textSize="12sp"
+                android:textColor="#52575C"
+                android:id="@+id/language_text"
+                app:layout_constraintTop_toTopOf="@id/lang_image"
+                app:layout_constraintBottom_toBottomOf="@id/lang_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <ImageView
+                android:id="@+id/star_image"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@id/language_text"
+                app:layout_constraintTop_toTopOf="@id/lang_image"
+                app:layout_constraintBottom_toBottomOf="@id/lang_image"
+                android:src="@mipmap/star"
+                android:layout_width="16dp"
+                android:layout_height="16dp">
+            </ImageView>
+
+            <TextView
+                android:id="@+id/star_text"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/star_image"
+                app:layout_constraintTop_toTopOf="@id/lang_image"
+                app:layout_constraintBottom_toBottomOf="@id/lang_image"
+                android:textColor="#52575C"
+                android:layout_marginStart="4dp"
+                tools:text="14352"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <ImageView
+                android:id="@+id/fork_image"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@id/star_text"
+                app:layout_constraintTop_toTopOf="@id/lang_image"
+                app:layout_constraintBottom_toBottomOf="@id/lang_image"
+                android:src="@mipmap/fork"
+                android:layout_width="16dp"
+                android:layout_height="16dp">
+            </ImageView>
+
+            <TextView
+                android:id="@+id/fork_text"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/fork_image"
+                app:layout_constraintTop_toTopOf="@id/lang_image"
+                app:layout_constraintBottom_toBottomOf="@id/lang_image"
+                android:textColor="#52575C"
+                android:layout_marginStart="4dp"
+                tools:text="14352"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

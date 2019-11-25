@@ -31,19 +31,23 @@ class GitHubRepositoryImpl(val githubDb: GithubDb): GitHubRepository {
     override fun fetchGitHubRepositories(responseListener: ResponseListener) {
         //update state as onFlight
         GlobalScope.launch {
-            val blockingFirst = gitHubRequestMaker.fetchWeatherForecast().blockingFirst()
-            if(blockingFirst.isSuccessful) {
-                //update network state as success
-                val body = blockingFirst.body()
-                if(body != null && body.isNotEmpty()) {
-                    githubDb.clearAllTables()
-                    githubDb.githubDao.addGithub(body)
-                    responseListener.onSuccess()
+            try {
+                val blockingFirst = gitHubRequestMaker.fetchWeatherForecast().blockingFirst()
+                if (blockingFirst.isSuccessful) {
+                    //update network state as success
+                    val body = blockingFirst.body()
+                    if (body != null && body.isNotEmpty()) {
+                        githubDb.clearAllTables()
+                        githubDb.githubDao.addGithub(body)
+                        responseListener.onSuccess()
+                    } else {
+                        responseListener.onFailure()
+                    }
                 } else {
+                    //update network state as error
                     responseListener.onFailure()
                 }
-            } else {
-                //update network state as error
+            }catch (e: Exception) {
                 responseListener.onFailure()
             }
         }
