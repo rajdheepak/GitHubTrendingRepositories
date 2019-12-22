@@ -1,31 +1,23 @@
 package com.zestworks.githubtrendingrepositories.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
+import com.zestworks.githubtrendingrepositories.dagger.AppComponentProvider
 import com.zestworks.githubtrendingrepositories.database.GithubDb
 import com.zestworks.githubtrendingrepositories.model.GitHubApiResponse
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class GitHubRepositoryImpl(val githubDb: GithubDb): GitHubRepository {
+class GitHubRepositoryImpl : GitHubRepository {
 
-    private var gitHubRequestMaker: GitHubRequestMaker
+    @Inject
+    lateinit var gitHubRequestMaker: GitHubRequestMaker
+
+    @Inject
+    lateinit var githubDb: GithubDb
 
     init {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://github-trending-api.now.sh")
-            .client(OkHttp.okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-        gitHubRequestMaker = retrofit.create(GitHubRequestMaker::class.java)
+        AppComponentProvider.appComponent().inject(this)
     }
 
     override fun fetchGitHubRepositories(responseListener: ResponseListener) {
@@ -56,8 +48,4 @@ class GitHubRepositoryImpl(val githubDb: GithubDb): GitHubRepository {
     override fun getGitHubs(): LiveData<List<GitHubApiResponse>> {
         return githubDb.githubDao.getGitHubApis()
     }
-}
-
-object OkHttp { //single instance of okHttp client so that all running requests can be cancelled in onCleared of ViewModel
-    val okHttpClient = OkHttpClient()
 }
