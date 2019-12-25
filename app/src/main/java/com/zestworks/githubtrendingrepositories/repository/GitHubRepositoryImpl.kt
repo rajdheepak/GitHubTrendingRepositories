@@ -1,11 +1,11 @@
 package com.zestworks.githubtrendingrepositories.repository
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import com.zestworks.githubtrendingrepositories.dagger.AppComponentProvider
 import com.zestworks.githubtrendingrepositories.database.GithubDb
 import com.zestworks.githubtrendingrepositories.model.GitHubApiResponse
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class GitHubRepositoryImpl : GitHubRepository {
@@ -20,14 +20,13 @@ class GitHubRepositoryImpl : GitHubRepository {
         AppComponentProvider.appComponent().inject(this)
     }
 
+    @SuppressLint("CheckResult")
     override fun fetchGitHubRepositories(responseListener: ResponseListener) {
-        //update state as onFlight
-        GlobalScope.launch {
-            try {
-                val blockingFirst = gitHubRequestMaker.fetchWeatherForecast().blockingFirst()
-                if (blockingFirst.isSuccessful) {
-                    //update network state as success
-                    val body = blockingFirst.body()
+        gitHubRequestMaker.fetchWeatherForecast()
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                if (it.isSuccessful) {
+                    val body = it.body()
                     if (body != null && body.isNotEmpty()) {
                         githubDb.clearAllTables()
                         githubDb.githubDao.addGithub(body)
@@ -36,13 +35,9 @@ class GitHubRepositoryImpl : GitHubRepository {
                         responseListener.onFailure()
                     }
                 } else {
-                    //update network state as error
                     responseListener.onFailure()
                 }
-            }catch (e: Exception) {
-                responseListener.onFailure()
             }
-        }
     }
 
     override fun getGitHubs(): LiveData<List<GitHubApiResponse>> {
