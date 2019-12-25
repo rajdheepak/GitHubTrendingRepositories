@@ -2,6 +2,7 @@ package com.zestworks.githubtrendingrepositories
 
 import android.app.Application
 import androidx.fragment.app.Fragment
+import com.blankj.utilcode.util.Utils
 import com.zestworks.githubtrendingrepositories.dagger.AppComponentProvider
 import com.zestworks.githubtrendingrepositories.dagger.DaggerAppComponent
 import dagger.android.AndroidInjector
@@ -25,6 +26,7 @@ class GithubApplication: Application(), HasSupportFragmentInjector {
         val appComponent = DaggerAppComponent.builder().application(this).build()
         appComponent.inject(this)
         AppComponentProvider.appComponent = appComponent
+        Utils.init(this)
     }
 
 }

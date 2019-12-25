@@ -23,6 +23,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -61,6 +68,8 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0' //Shimmer
 
     androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0' //okhttp idling resource
+
+    implementation 'com.blankj:utilcode:1.5.0' //utils code
 
     implementation "com.google.dagger:dagger-android:2.18" //dagger
     implementation "com.google.dagger:dagger-android-support:2.18"
