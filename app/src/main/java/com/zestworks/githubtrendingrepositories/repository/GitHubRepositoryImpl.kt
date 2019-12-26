@@ -14,6 +14,10 @@ import javax.inject.Inject
 
 class GitHubRepositoryImpl : GitHubRepository {
 
+    override fun getGithubByName(): LiveData<List<GitHubApiResponse>> {
+        return githubDb.githubDao.getGithubApisByName()
+    }
+
     @Inject
     lateinit var gitHubRequestMaker: GitHubRequestMaker
 
@@ -58,4 +62,9 @@ class GitHubRepositoryImpl : GitHubRepository {
     override fun getGitHubs(): LiveData<List<GitHubApiResponse>> {
         return githubDb.githubDao.getGitHubApis()
     }
+
+    override fun getGitHubsByStars(): LiveData<List<GitHubApiResponse>> {
+        return githubDb.githubDao.getGithubApisByStars()
+    }
+
 }

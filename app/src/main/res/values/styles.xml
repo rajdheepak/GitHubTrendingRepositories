@@ -11,7 +11,8 @@
     </style>
 
     <style name="custom_toolbar" parent="@style/Widget.AppCompat.Toolbar">
-        <item name="titleTextColor">#000000</item>
+        <item name="titleTextColor">#FFFFFF</item>
+        <item name="android:background">#000000</item>
     </style>
 
 </resources>

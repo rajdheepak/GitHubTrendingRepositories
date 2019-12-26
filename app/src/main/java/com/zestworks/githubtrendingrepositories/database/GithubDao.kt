@@ -15,4 +15,10 @@ interface GithubDao {
 
     @Query("SELECT * from githubapi")
     fun getGitHubApis(): LiveData<List<GitHubApiResponse>>
+
+    @Query("SELECT * from githubapi ORDER BY stars desc")
+    fun getGithubApisByStars(): LiveData<List<GitHubApiResponse>>
+
+    @Query("SELECT * FROM GITHUBAPI ORDER BY name asc")
+    fun getGithubApisByName(): LiveData<List<GitHubApiResponse>>
 }

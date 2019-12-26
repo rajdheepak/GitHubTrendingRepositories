@@ -35,12 +35,28 @@ class GitHubViewModel(val gitHubRepository: GitHubRepository): ViewModel() {
         return gitHubRepository.getGitHubs()
     }
 
+    fun getGithubsByStars(): LiveData<List<GitHubApiResponse>> {
+        return gitHubRepository.getGitHubsByStars()
+    }
+
+    fun getGitHubByNames(): LiveData<List<GitHubApiResponse>> {
+        return gitHubRepository.getGithubByName()
+    }
+
     fun onTouchingViewHolder(position: Int) {
         if(githubState.value.touchedItem == position) {
             githubState.accept(githubState.value.copy(touchedItem = -1))
         } else {
             githubState.accept(githubState.value.copy(touchedItem = position))
         }
+    }
+
+    fun actionSwitchToStars() {
+        githubState.accept(githubState.value.copy(listingType = ListingType.SORT_BY_STARS))
+    }
+
+    fun actionSwitchToName() {
+        githubState.accept(githubState.value.copy(listingType = ListingType.SORT_BY_NAME))
     }
 
 }

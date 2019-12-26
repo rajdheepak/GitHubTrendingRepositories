@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:visible="true"
+        android:id="@+id/sort_by_stars"
+        android:title="sort by stars"
+        >
+    </item>
+    <item
+        android:visible="true"
+        android:id="@+id/sort_by_name"
+        android:title="sort by Name"
+        >
+    </item>
+</menu>

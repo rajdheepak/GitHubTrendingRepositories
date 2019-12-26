@@ -2,9 +2,7 @@ package com.zestworks.githubtrendingrepositories.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,6 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.error_page_layout.*
 import kotlinx.android.synthetic.main.github_list_fragment.*
+import kotlinx.android.synthetic.main.github_list_fragment.view.*
 
 class GithubListFragment: Fragment() {
 
@@ -28,12 +27,39 @@ class GithubListFragment: Fragment() {
     private lateinit var compositeDisposable: CompositeDisposable
     private var gitHubApiResponse = listOf<GitHubApiResponse>()
 
+    init {
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.github_list_fragment, container, false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.listing_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.sort_by_stars -> {
+                gitHubViewModel.actionSwitchToStars()
+            }
+            R.id.sort_by_name -> {
+                gitHubViewModel.actionSwitchToName()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,6 +81,9 @@ class GithubListFragment: Fragment() {
         retry_button.setOnClickListener {
             gitHubViewModel.fetchGithubRepositories()
         }
+       /* toolbar.sort_by_stars_button.setOnClickListener {
+            gitHubViewModel.actionSwitchToStars()
+        }*/
     }
 
     @SuppressLint("CheckResult")
@@ -63,7 +92,7 @@ class GithubListFragment: Fragment() {
         gitHubViewModel = ViewModelFactory.getGithubViewModel(activity!! as AppCompatActivity)
         compositeDisposable = CompositeDisposable()
         compositeDisposable.add(gitHubViewModel.githubState.observeOn(AndroidSchedulers.mainThread()).subscribe {
-            (github_list_view.adapter as GithubListAdapter)?.updatePosition(it.touchedItem)
+            (github_list_view.adapter as GithubListAdapter).updatePosition(it.touchedItem)
             when(it.gitHubApiResponseState) {
                 YetToStart -> {
                     if(shimmer_layout.visibility != View.VISIBLE && gitHubApiResponse.isEmpty()) {
@@ -95,6 +124,34 @@ class GithubListFragment: Fragment() {
                     }
                 }
             }
+            if(it.listingType == ListingType.DEFAULT) {
+                gitHubViewModel.getGithubsByStars().removeObservers(this)
+                gitHubViewModel.getGitHubByNames().removeObservers(this)
+                if(!gitHubViewModel.getGitHubs().hasActiveObservers()) {
+                    gitHubViewModel.getGitHubs().observe(this, Observer {
+                        gitHubApiResponse = it
+                        populateUi(it)
+                    })
+                }
+            } else if (it.listingType == ListingType.SORT_BY_STARS){
+                gitHubViewModel.getGitHubs().removeObservers(this)
+                gitHubViewModel.getGitHubByNames().removeObservers(this)
+                if(!gitHubViewModel.getGithubsByStars().hasActiveObservers()) {
+                    gitHubViewModel.getGithubsByStars().observe(this, Observer {
+                        gitHubApiResponse = it
+                        populateUi(it)
+                    })
+                }
+            } else {
+                gitHubViewModel.getGitHubs().removeObservers(this)
+                gitHubViewModel.getGithubsByStars().removeObservers(this)
+                if(!gitHubViewModel.getGitHubByNames().hasActiveObservers()) {
+                    gitHubViewModel.getGitHubByNames().observe(this, Observer {
+                        gitHubApiResponse = it
+                        populateUi(it)
+                    })
+                }
+            }
         })
         gitHubViewModel.getGitHubs().observe(this, Observer {
             gitHubApiResponse = it
@@ -110,6 +167,20 @@ class GithubListFragment: Fragment() {
             }
         })
         gitHubViewModel.fetchGithubRepositories()
+    }
+
+    private fun populateUi(it: List<GitHubApiResponse>) {
+        view?.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)?.isRefreshing =
+            false
+        if (it.isNotEmpty()) {
+            if (shimmer_layout.visibility == View.VISIBLE) {
+                shimmer_layout.visibility = View.GONE
+                shimmer_layout.stopShimmer()
+            }
+            github_list_view.visibility = View.VISIBLE
+            error_page_layout.visibility = View.GONE
+            (github_list_view.adapter as GithubListAdapter).updateGithubItems(it)
+        }
     }
 
     override fun onStop() {
